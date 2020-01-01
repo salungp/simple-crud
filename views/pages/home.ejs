@@ -1,0 +1,77 @@
+<%- include('../templates/header') %>
+<% if(locals.message){ %>
+    <div class="alert alert-success" role="alert">
+        <strong>Well done!</strong> <%=message%>
+    </div>
+<% } %>
+<h3>Data siswa</h3>
+<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
+  <i class="fa fa-plus"></i> Tambah siswa
+</button>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close btn-default" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/store" method="POST">
+        	<div class="form-group">
+        		<label for="name">Nama</label>
+        		<input type="text" name="name" id="name" class="form-control" required>
+        	</div>
+        	<div class="form-group">
+        		<label for="email">Email</label>
+        		<input type="email" name="email" id="email" class="form-control" required>
+        	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+	<div class="col-md-8">
+		<div class="table-responsive">
+		  <table class="table">
+		    <thead>
+		    	<tr>
+		    		<th>NO</th>
+		    		<th>AKSI</th>
+		    		<th>NAMA</th>
+		    		<th>EMAIL</th>
+		    		<th>TANGGAL</th>
+		    	</tr>
+		    </thead>
+		    <tbody>
+		    	<% var i = 1; %>
+		    	<% data.forEach(function(user) { %>
+		    	<tr>
+		    		<td><%= i++; %>.</td>
+		    		<td>
+		    			<div class="btn-group">		    				
+			    			<a href="<%= 'http://localhost:5000/edit/'+user.id; %>" class="btn btn-primary">
+			    				<i class="fa fa-pencil"></i>
+			    			</a>
+			    			<a onclick="return window.confirm('Yakin?');" href="<%= 'delete/'+user.id; %>" class="btn btn-danger">
+			    				<i class="fa fa-trash"></i>
+			    			</a>
+		    			</div>
+		    		</td>
+		    		<td><%= user['name'] %></td>
+		    		<td><%= user['email']; %></td>
+		    		<td><%= user['created_at'] %></td>
+		    	</tr>
+		    	<% }); %>
+		    </tbody>
+		  </table>
+		</div>
+	</div>
+</div>
+<%- include('../templates/footer') %>
