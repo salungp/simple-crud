@@ -1,20 +1,24 @@
 var express = require('express');
 var router = express.Router();
 var connection = require('../models/connection');
+var siswa = require('../models/Siswa');
+var dateFormat = require('dateformat');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	connection.query('SELECT * FROM siswa', function(err, rows, fields) {
-	  res.render('pages/home', { title: 'Home page', data: rows });
+	siswa.get(function(data) {
+	  res.render('pages/home', { title: 'Home page', data: data, date: dateFormat });
 	});
 });
 
 router.post('/store', function(req, res, next) {
 	var { name, email } = req.body;
-	connection.query(`INSERT INTO siswa (name, email) VALUES ('${name}', '${email}')`, function(err, rows, fields) {
-		if (err) throw err;
+	siswa.insert(function() {
 		res.locals.message = req.flash('success', 'Data successfully inserted!');
 		res.redirect('/');
+	}, {
+		name: siswa.prefix(name),
+		email: siswa.prefix(email)
 	});
 });
 
